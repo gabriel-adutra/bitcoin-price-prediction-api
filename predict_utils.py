@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 
 ###########
 def download_bitcoin_historical_data(period_duration: str = "500d") -> pd.DataFrame:
-    """ Baixa os dados históricos de preço do Bitcoin, calcula indicadores financeiros e ordena os dados. """
+    """ Downloads historical Bitcoin price data, calculates financial indicators and sorts the data. """
 
     logger.info(f"download_bitcoin_historical_data() is called with period_duration: {period_duration}")
     bitcoin_ticker = yf.Ticker("BTC-USD")
@@ -26,7 +26,7 @@ def download_bitcoin_historical_data(period_duration: str = "500d") -> pd.DataFr
 
 ###########
 def extract_latest_record_and_prepare_input_array(historical_data_sorted_desc: pd.DataFrame) -> np.ndarray:
-    """ Extrai o registro mais recente dos dados históricos e prepara um array de features para o modelo. """
+    """ Extracts the most recent record from historical data and prepares a features array for the model. """
 
     latest_day_record = historical_data_sorted_desc.iloc[0, :]
     latest_day_record_filled_na = latest_day_record.fillna(0)
@@ -36,7 +36,7 @@ def extract_latest_record_and_prepare_input_array(historical_data_sorted_desc: p
 
 ###########
 def load_data_scaler_from_file(scaler_file_path: str = "btc_feature_scaler.bin") -> StandardScaler:
-    """ Carrega o objeto scaler utilizado para normalização dos dados de entrada. """
+    """ Loads the scaler object used for input data normalization. """
 
     logger.info(f"load_data_scaler_from_file() is called with scaler_file_path: {scaler_file_path}")
     scaler_object = load(scaler_file_path)
@@ -45,7 +45,7 @@ def load_data_scaler_from_file(scaler_file_path: str = "btc_feature_scaler.bin")
 
 ###########
 def apply_scaler_to_input_features(scaler_object: StandardScaler, input_features_array: np.ndarray) -> np.ndarray:
-    """ Aplica o scaler aos dados de entrada para normalização. """
+    """ Applies the scaler to input data for normalization. """
     
     scaled_input_features_array = scaler_object.transform(input_features_array)
     return scaled_input_features_array
@@ -53,7 +53,7 @@ def apply_scaler_to_input_features(scaler_object: StandardScaler, input_features
 
 ###########
 def load_machine_learning_model_by_name(model_name: str) -> BaseEstimator:
-    """ Carrega o modelo de machine learning com base no nome especificado. """
+    """ Loads the machine learning model based on the specified name. """
     
     logger.info(f"load_machine_learning_model_by_name() is called with model_name: {model_name}")
     if model_name == "Random Forest":
@@ -66,7 +66,7 @@ def load_machine_learning_model_by_name(model_name: str) -> BaseEstimator:
 
 ###########
 def predict_next_day_price(model_object: BaseEstimator, scaled_input_features: np.ndarray) -> np.ndarray:
-    """ Realiza a previsão do preço do Bitcoin para o próximo dia usando o modelo fornecido. """
+    """ Performs Bitcoin price prediction for the next day using the provided model. """
 
     predicted_price_array = model_object.predict(scaled_input_features)
     logger.info(f"predict_next_day_price() is returning {predicted_price_array}")
@@ -75,7 +75,7 @@ def predict_next_day_price(model_object: BaseEstimator, scaled_input_features: n
 
 ###########
 def build_prediction_response(model_name_used: str, historical_data_sorted_desc: pd.DataFrame, predicted_price_array: np.ndarray) -> dict:
-    """ Monta o dicionário de resposta para a API contendo o modelo utilizado, o último preço conhecido e a previsão. """
+    """ Builds the API response dictionary containing the model used, last known price and prediction. """
     
     last_known_bitcoin_price = historical_data_sorted_desc.iloc[0, 3]
     response_dict = {

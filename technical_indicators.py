@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
 
-# Função de cálculo dos indicadores
-def calculate_technical_indicators(price_data) :
+
+def calculate_technical_indicators(price_data):
 
     price_data = calculate_williams_percent_r(price_data,14)
     price_data = calculate_rate_of_change(price_data,14)

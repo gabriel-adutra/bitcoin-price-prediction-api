@@ -5,15 +5,15 @@ from pydantic import BaseModel
 import predict_utils
 
 
-# Configuração do logger
+# Logger configuration
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 
-# Define metadados para a documentação da API
-tags_metadata = [{"name": "Bitcoin-Price-Prediction", "description": "Prevendo o Preço de Bitcoin com Machine Learning"}]
+# Define metadata for API documentation
+tags_metadata = [{"name": "Bitcoin-Price-Prediction", "description": "Predicting Bitcoin Price with Machine Learning"}]
 
-# Cria a instância da aplicação FastAPI com informações de metadados
+# Create FastAPI application instance with metadata information
 app = FastAPI(
     title="Bitcoin Price API – Price Prediction with Machine Learning",
         description=(
@@ -26,7 +26,7 @@ app = FastAPI(
 
 
 ############
-class Features(BaseModel):  # Define um modelo Pydantic para validar os dados de entrada
+class Features(BaseModel):  # Define a Pydantic model to validate input data
     Model: str
 
 
@@ -40,7 +40,7 @@ def message():
 ############
 @app.post("/predict-bitcoin-price", tags=["Bitcoin Price Prediction"])
 async def predict(features: Features) -> dict:
-    """ Endpoint para previsão do preço do Bitcoin para o próximo dia. """
+    """ Endpoint for predicting Bitcoin price for the next day. """
     
     logger.info(f" /predict-bitcoin-price endpoint is requested with model: {features.Model}")
     
@@ -63,7 +63,7 @@ async def predict(features: Features) -> dict:
 
 
 #########################
-# Inicia o servidor em qualquer ip da máquina e na porta 3000
+# Start server on any machine IP and port 3000
 if __name__ == "__main__":
     logger.info("Starting Uvicorn server on 0.0.0.0:3000")
     uvicorn.run(app, host="0.0.0.0", port=3000)
